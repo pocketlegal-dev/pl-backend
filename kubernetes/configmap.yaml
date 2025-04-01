@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pocketlegal-config
+data:
+  # Base URLs
+  base-url: "https://api.pocketlegal.com"
+  frontend-url: "https://app.pocketlegal.com"
+  
+  # Logging configuration
+  log-level: "info"
+  
+  # Email service configuration (non-sensitive)
+  email-service: "smtp.gmail.com"
+  email-port: "587"
+  email-from: "noreply@pocketlegal.com" 

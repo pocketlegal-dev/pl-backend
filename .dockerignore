@@ -1,0 +1,56 @@
+# Node modules and dependencies
+node_modules
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+.pnpm-debug.log
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Git
+.git
+.gitignore
+.github
+
+# Documentation and markdown files
+*.md
+!README.md
+!DEVELOPER_DOCS.md
+
+# Test files
+__tests__
+*.test.js
+*.spec.js
+coverage
+.nyc_output
+
+# Development files
+.vscode
+.idea
+*.sublime-*
+.DS_Store
+Thumbs.db
+
+# Log files
+logs
+*.log
+
+# Build artifacts
+dist
+build
+.cache
+
+# Temporary files
+tmp
+temp
+
+# Docker files (not needed inside the image)
+Dockerfile*
+docker-compose*
+
+# Large files and media
+uploads/*
+!uploads/.gitkeep 

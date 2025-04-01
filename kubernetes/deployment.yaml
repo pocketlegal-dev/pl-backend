@@ -1,0 +1,110 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pocketlegal-backend
+  labels:
+    app: pocketlegal-backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: pocketlegal-backend
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: pocketlegal-backend
+    spec:
+      containers:
+      - name: pocketlegal-backend
+        image: ${DOCKER_REGISTRY}/pocketlegal-backend:{{IMAGE_TAG}}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: PORT
+          value: "5000"
+        - name: MONGO_URI
+          valueFrom:
+            secretKeyRef:
+              name: pocketlegal-secrets
+              key: mongodb-uri
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: pocketlegal-secrets
+              key: jwt-secret
+        - name: JWT_EXPIRE
+          value: "30d"
+        - name: BASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: pocketlegal-config
+              key: base-url
+        - name: FRONTEND_URL
+          valueFrom:
+            configMapKeyRef:
+              name: pocketlegal-config
+              key: frontend-url
+        - name: GOOGLE_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: pocketlegal-secrets
+              key: google-client-id
+        - name: GOOGLE_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: pocketlegal-secrets
+              key: google-client-secret
+        - name: FACEBOOK_APP_ID
+          valueFrom:
+            secretKeyRef:
+              name: pocketlegal-secrets
+              key: facebook-app-id
+        - name: FACEBOOK_APP_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: pocketlegal-secrets
+              key: facebook-app-secret
+        - name: LINKEDIN_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: pocketlegal-secrets
+              key: linkedin-client-id
+        - name: LINKEDIN_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: pocketlegal-secrets
+              key: linkedin-client-secret
+        - name: STRIPE_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: pocketlegal-secrets
+              key: stripe-secret-key
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          initialDelaySeconds: 30
+          periodSeconds: 30
+      imagePullSecrets:
+      - name: regcred 
